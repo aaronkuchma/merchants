@@ -371,9 +371,15 @@ class plgVmPaymentCavirtex extends vmPSPlugin {
 		$post["secret_key"]=$method->merchant_secret_key;
 		 
 		//file_put_contents($lgfile, "POST contents: ".print_r($post, TRUE)."\r\n", FILE_APPEND | LOCK_EX);
+		 
+		$poststring = '';
+		foreach ($post AS $key => $val) {
+			$poststring .= urlencode($key) . "=" . urlencode($val) . "&";
+		}
+		$poststring = rtrim($poststring, "& ");
 		
 		curl_setopt($curl, CURLOPT_POST, 1);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $poststring);
 		
 		$responseString = curl_exec($curl);
 		if($responseString == false) {
